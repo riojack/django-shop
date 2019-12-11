@@ -36,4 +36,5 @@ def step_i_receive_back_an_object_with_the_skus_description_weight_per_item_coun
         'upc': '78087204980',
         'msrp': '$7.00',
     }
+    assert len(context.search_results) == 1
     assert context.search_results[0] == expected_sku
