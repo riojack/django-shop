@@ -2,3 +2,4 @@
 /.virtualenv
 /.pytest_cache
 **/*.pyc
+**/*.sqlite*
