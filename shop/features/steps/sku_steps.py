@@ -13,7 +13,7 @@ def step_i_have_added_a_product_by_sku(context):
         'upc': '78087204980',
         'msrp': '$7.00',
     }
-    req = requests.post(context.get_url('/products/'), data=sku, allow_redirects=False)
+    req = requests.post(context.get_url('/products/'), json=sku, allow_redirects=False)
     assert req.status_code == requests.codes.created
 
 
@@ -22,7 +22,7 @@ def step_i_search_for_the_same_product_by_sku(context):
     search_parameters = {
         'sku_name': '11 oz Beverage Mug'
     }
-    req = requests.post(context.get_url('/products/search'), data=search_parameters, allow_redirects=False)
+    req = requests.post(context.get_url('/products/search'), json=search_parameters, allow_redirects=False)
     assert req.status_code == requests.codes.ok
     context.search_results = req.json()
 
