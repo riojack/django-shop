@@ -14,7 +14,7 @@ class ProductValidatorTests(TestCase):
         validator = ProductValidator()
         errors = validator.validate(product)
 
-        assert "Product does not have a description field" in errors
+        self.assertIn("Product does not have a description field", errors)
 
     def test_should_fail_if_product_has_no_description_text(self):
         product = {
@@ -28,5 +28,5 @@ class ProductValidatorTests(TestCase):
         validator = ProductValidator()
         errors = validator.validate(product)
 
-        assert len(errors) == 1
+        self.assertEqual(len(errors), 1)
         assert "Product does not have text in it's description field" in errors
