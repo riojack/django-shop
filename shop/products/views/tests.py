@@ -9,3 +9,9 @@ class AddProductsViewTests(TestCase):
         res = view.post({})
 
         assert res.status_code == 201
+
+    def test_should_have_response_content_type_of_application_json(self):
+        view = AddProductsView()
+        res = view.post({})
+
+        assert res.get('Content-Type') == 'application/json'
