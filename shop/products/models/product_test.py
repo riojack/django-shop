@@ -1,3 +1,5 @@
+import unittest
+
 from django.test import TestCase
 
 from .product import Product
@@ -19,3 +21,6 @@ class ProductTest(TestCase):
         self.assertEqual(json_dictionary['count'], product.count)
         self.assertEqual(json_dictionary['upc'], product.upc)
         self.assertEqual(json_dictionary['msrp'], product.msrp)
+
+    def test_from_json_raises_key_error_if_an_expected_key_is_not_found(self):
+        self.assertRaises(KeyError, Product.from_json, {})
