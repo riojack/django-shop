@@ -1,5 +1,3 @@
-import unittest
-
 from django.test import TestCase
 
 from .product import Product
@@ -24,3 +22,6 @@ class ProductTest(TestCase):
 
     def test_from_json_raises_key_error_if_an_expected_key_is_not_found(self):
         self.assertRaises(KeyError, Product.from_json, {})
+
+    def test_from_json_raises_type_error_if_non_dictionary_is_passed(self):
+        self.assertRaises(TypeError, Product.from_json, '')
