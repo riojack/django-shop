@@ -9,16 +9,8 @@ class FakeRequest:
     pass
 
 
-VALID_PRODUCT = '''{
+PRODUCT_JSON = '''{
             "description": "Something",
-            "unit_weight": "14.4 oz",
-            "count": 250,
-            "upc": "78087204980",
-            "msrp": "$7.00"
-        }'''.strip('\n\r')
-
-INVALID_PRODUCT = '''{
-            "description": "",
             "unit_weight": "14.4 oz",
             "count": 250,
             "upc": "78087204980",
@@ -27,35 +19,30 @@ INVALID_PRODUCT = '''{
 
 
 class AddProductsViewTests(TestCase):
-    def test_should_have_response_status_code_of_201(self):
+    def setUp(self):
         view = AddProductsView()
         view.validator = MagicMock(spec_set=ProductValidator())
         view.validator.validate.return_value = []
-        fake_req = FakeRequest()
-        fake_req.body = VALID_PRODUCT
 
-        res = view.post(fake_req)
+        fake_request = FakeRequest()
+        fake_request.body = PRODUCT_JSON
 
-        self.assertEqual(res.status_code, 201)
+        self.view = view
+        self.fake_request = fake_request
+
+    def test_should_have_response_status_code_of_201(self):
+        response = self.view.post(self.fake_request)
+
+        self.assertEqual(response.status_code, 201)
 
     def test_should_have_response_content_type_of_application_json(self):
-        view = AddProductsView()
-        view.validator = MagicMock(spec_set=ProductValidator())
-        view.validator.validate.return_value = []
-        fake_req = FakeRequest()
-        fake_req.body = VALID_PRODUCT
+        response = self.view.post(self.fake_request)
 
-        res = view.post(fake_req)
-
-        self.assertEqual(res.get('content-type'), 'application/json')
+        self.assertEqual(response.get('content-type'), 'application/json')
 
     def test_should_have_response_status_code_of_400_if_product_is_invalid(self):
-        view = AddProductsView()
-        view.validator = MagicMock(spec_set=ProductValidator())
-        view.validator.validate.return_value = ['this', 'is', 'an', 'error']
-        fake_req = FakeRequest()
-        fake_req.body = INVALID_PRODUCT
+        self.view.validator.validate.return_value = ['this', 'is', 'an', 'error']
 
-        res = view.post(fake_req)
+        response = self.view.post(self.fake_request)
 
-        self.assertEqual(res.status_code, 400)
+        self.assertEqual(response.status_code, 400)
