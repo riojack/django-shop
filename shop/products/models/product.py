@@ -10,3 +10,13 @@ class Product(models.Model):
     count = models.BigIntegerField(default=0)
     upc = models.CharField(max_length=32)
     msrp = models.CharField(max_length=512)
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls.objects.create(
+            description=json_dict['description'],
+            unit_weight=json_dict['unit_weight'],
+            count=json_dict['count'],
+            upc=json_dict['upc'],
+            msrp=json_dict['msrp']
+        )
