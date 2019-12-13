@@ -1,8 +1,7 @@
 from unittest import TestCase
-from unittest.mock import MagicMock
+from unittest.mock import patch, PropertyMock
 
 from .add_products import AddProductsView
-from ..services.product_validator import ProductValidator
 
 
 class FakeRequest:
@@ -20,15 +19,27 @@ PRODUCT_JSON = '''{
 
 class AddProductsViewTests(TestCase):
     def setUp(self):
+        self.fakeHttpRequestClassPatcher = patch('django.http.HttpRequest', spec=True)
+        self.fakeProductValidatorClassPatcher = patch('products.services.product_validator.ProductValidator', spec=True)
+
+        FakeHttpRequestClass = self.fakeHttpRequestClassPatcher.start()
+        FakeProductValidatorClass = self.fakeProductValidatorClassPatcher.start()
+
         view = AddProductsView()
-        view.validator = MagicMock(spec_set=ProductValidator())
+        view.validator = FakeProductValidatorClass()
         view.validator.validate.return_value = []
 
-        fake_request = FakeRequest()
-        fake_request.body = PRODUCT_JSON
+        fake_request = FakeHttpRequestClass()
+        type(fake_request).body = PropertyMock(return_value=PRODUCT_JSON)
+        # For an explanation of the grossness above, see...
+        # https://docs.python.org/3.7/library/unittest.mock.html#unittest.mock.PropertyMock
 
         self.view = view
         self.fake_request = fake_request
+
+    def tearDown(self):
+        self.fakeHttpRequestClassPatcher.stop()
+        self.fakeProductValidatorClassPatcher.stop()
 
     def test_should_have_response_status_code_of_201(self):
         response = self.view.post(self.fake_request)
