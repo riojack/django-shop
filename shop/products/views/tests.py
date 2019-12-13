@@ -3,11 +3,6 @@ from unittest.mock import patch, PropertyMock
 
 from .add_products import AddProductsView
 
-
-class FakeRequest:
-    pass
-
-
 PRODUCT_JSON = '''{
             "description": "Something",
             "unit_weight": "14.4 oz",
