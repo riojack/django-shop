@@ -39,7 +39,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd shop
-            python manage.py test -v 2
+            python manage.py test -p "*_test.py" -v 2
 
       - run:
           name: run acceptance tests

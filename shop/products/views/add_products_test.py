@@ -12,7 +12,7 @@ PRODUCT_JSON = '''{
         }'''.strip('\n\r')
 
 
-class AddProductsViewTests(TestCase):
+class AddProductsViewTest(TestCase):
     def setUp(self):
         self.fakeHttpRequestClassPatcher = patch('django.http.HttpRequest', spec=True)
         self.fakeProductValidatorClassPatcher = patch('products.services.product_validator.ProductValidator', spec=True)

@@ -3,7 +3,7 @@ from unittest import TestCase
 from .product_validator import ProductValidator
 
 
-class ProductValidatorTests(TestCase):
+class ProductValidatorTest(TestCase):
     def test_should_return_empty_list_if_product_has_all_expected_fields(self):
         product = {
             'description': '11 oz Beverage Mug',
